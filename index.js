@@ -27,8 +27,8 @@ app.use(function(req,res,next){
 })
 
 connection.connect();
-//CREATE TABLE list (id varchar(10) NOT NULL, secret varchar(20) NOT NULL, url text NOT NULL, PRIMARY KEY(id));
-//CREATE TABLE counter ( _id int NOT NULL AUTO_INCREMENT, id varchar(10) NOT NULL ,ip varchar(31) NOT NULL,useragent varchar(255) NOT NULL, user varchar(31) NOT NULL, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(_id));
+//CREATE TABLE IF NOT EXISTS list (id varchar(10) NOT NULL, secret varchar(20) NOT NULL, url text NOT NULL, PRIMARY KEY(id));
+//CREATE TABLE IF NOT EXISTS counter ( _id int NOT NULL AUTO_INCREMENT, id varchar(10) NOT NULL ,ip varchar(31) NOT NULL,useragent varchar(255) NOT NULL, user varchar(31) NOT NULL, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(_id));
 var chars = "abcdefghijklmnopqrstuvwxyz0123456789_"
 var random_gen = function(len) {
     return Array.apply(null, {
