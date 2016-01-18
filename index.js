@@ -11,10 +11,11 @@ app.use(bodyParser.urlencoded({
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'user',
-    password: 'password',
-    database: 'tracking'
+    host     : process.env.OPENSHIFT_MYSQL_DB_HOST,
+    user     : process.env.OPENSHIFT_MYSQL_DB_USERNAME,
+    password : process.env.OPENSHIFT_MYSQL_DB_PASSWORD,
+    port     : process.env.OPENSHIFT_MYSQL_DB_PORT,
+    database : process.env.OPENSHIFT_APP_NAME
 });
 
 app.use(function(req,res,next){
@@ -121,7 +122,9 @@ app.get('/:id', function(req, res) {
 
 });
 
-var server = app.listen(3000, function() {
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP;
+var port = process.env.OPENSHIFT_NODEJS_PORT;
+var server = app.listen( port, ipaddress, function() {
     var host = server.address().address;
     var port = server.address().port;
 
