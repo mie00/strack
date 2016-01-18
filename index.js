@@ -31,7 +31,7 @@ connection.connect(function(err){
         return console.log(err)
     }
     connection.query('CREATE TABLE IF NOT EXISTS list (id varchar(10) NOT NULL, secret varchar(20) NOT NULL, url text NOT NULL, PRIMARY KEY(id))',console.log);
-    connection.query('CREATE TABLE IF NOT EXISTS counter ( _id int NOT NULL AUTO_INCREMENT, id varchar(10) NOT NULL ,ip varchar(31) NOT NULL,useragent varchar(255) NOT NULL, user varchar(31) NOT NULL, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(_id))',console.log);
+    connection.query('CREATE TABLE IF NOT EXISTS counter ( _id int NOT NULL AUTO_INCREMENT, id varchar(10) NOT NULL ,ip varchar(31) NOT NULL,useragent varchar(255) NOT NULL, referer varchar(255), user varchar(31) NOT NULL, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(_id))',console.log);
 });
 //CREATE TABLE IF NOT EXISTS list (id varchar(10) NOT NULL, secret varchar(20) NOT NULL, url text NOT NULL, PRIMARY KEY(id));
 //CREATE TABLE IF NOT EXISTS counter ( _id int NOT NULL AUTO_INCREMENT, id varchar(10) NOT NULL ,ip varchar(31) NOT NULL,useragent varchar(255) NOT NULL, user varchar(31) NOT NULL, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(_id));
@@ -86,7 +86,7 @@ app.get('/:id', function(req, res) {
         else
             res.send('err');
     });
-    connection.query("INSERT INTO counter(id,ip,useragent,user) VALUES (?,?,?,?)", [req.params.id, req.ip, req.headers['user-agent'], req.cookies.id], function(err, result) {
+    connection.query("INSERT INTO counter(id,ip,useragent,referer,user) VALUES (?,?,?,?,?)", [req.params.id, req.ip, req.headers['user-agent'], req.headers['referer'], req.cookies.id], function(err, result) {
         if (err)
             console.log(err);
     });
