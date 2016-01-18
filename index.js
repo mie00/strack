@@ -114,7 +114,7 @@ app.get('/:id', function(req, res) {
             res.send('err');
         }
     });
-    connection.query("INSERT INTO counter(id,ip,useragent,referer,user) VALUES (?,?,?,?,?)", [req.params.id, req.ip, req.headers['user-agent'], req.headers['referer'], req.cookies.id], function(err, result) {
+    connection.query("INSERT INTO counter(id,ip,useragent,referer,user) VALUES (?,?,?,?,?)", [req.params.id, req.headers['x-forwarded-for'], req.headers['user-agent'], req.headers['referer'], req.cookies.id], function(err, result) {
         if (err){
             console.log(err)
         }
