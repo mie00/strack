@@ -55,8 +55,10 @@ app.get('/secret/:secret', function(req, res) {
     connection.query("SELECT c.* FROM counter c JOIN list l USING(id) WHERE secret = ?", [req.params.secret], function(err, result) {
         if (!err)
             res.json(result);
-        else
+        else{
+            console.log(err);
             res.send('err');
+        }
     })
 })
 app.get('/', function(req, res) {
@@ -75,8 +77,10 @@ app.post('/store', function(req, res) {
             res.send(([criteria.url,'/'+criteria.id,'/secret/'+criteria.secret]).map(function(x){
             	return "<a href='"+x+"'>"+x+"</a>"
             }).join('<br />'));
-        else
+        else{
+            console.log(err)
             res.send('err');
+        }
     });
 });
 app.get('/:id', function(req, res) {
@@ -87,8 +91,10 @@ app.get('/:id', function(req, res) {
             res.send('err');
     });
     connection.query("INSERT INTO counter(id,ip,useragent,referer,user) VALUES (?,?,?,?,?)", [req.params.id, req.ip, req.headers['user-agent'], req.headers['referer'], req.cookies.id], function(err, result) {
-        if (err)
-            console.log(err);
+        if (err){
+            console.log(err)
+            res.send('err');
+        }
     });
 
 });
