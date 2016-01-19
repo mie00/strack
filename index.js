@@ -30,7 +30,7 @@ connection.connect(function(err){
     if(err){
         return console.log(err)
     }
-    connection.query('CREATE TABLE IF NOT EXISTS list (id varchar(10) NOT NULL, secret varchar(20) NOT NULL, url text NOT NULL, PRIMARY KEY(id))',console.log);
+    connection.query('CREATE TABLE IF NOT EXISTS list (id varchar(10) NOT NULL, secret varchar(20) NOT NULL, url text NOT NULL, owner varchar(31) NOT NULL, PRIMARY KEY(id))',console.log);
     connection.query('CREATE TABLE IF NOT EXISTS counter ( _id int NOT NULL AUTO_INCREMENT, id varchar(10) NOT NULL ,ip varchar(31) NOT NULL,useragent varchar(255) NOT NULL, referer varchar(255), user varchar(31) NOT NULL, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(_id))',console.log);
 });
 //CREATE TABLE IF NOT EXISTS list (id varchar(10) NOT NULL, secret varchar(20) NOT NULL, url text NOT NULL, PRIMARY KEY(id));
@@ -64,6 +64,11 @@ app.get('/secret/:secret', function(req, res) {
 app.get('/', function(req, res) {
     res.send('<form method="post" action="/store"><input type="text" name="url" /><input type="submit" value="submit" /></form>')
 });
+
+var serialize_criteria = function(criteria){return ([criteria.url,'/'+criteria.id,'/secret/'+criteria.secret]).map(function(x){
+    return "<a href='"+x+"'>"+x+"</a>"
+}).join('<br />')}
+
 app.post('/store', function(req, res) {
     var id = random_gen(10);
     var secret = random_gen(20);
@@ -72,11 +77,20 @@ app.post('/store', function(req, res) {
         id: id,
         secret: secret
     }
-    connection.query("INSERT INTO list(url,id,secret) VALUES (?,?,?)", [criteria.url, criteria.id, criteria.secret], function(err, result) {
+    connection.query("INSERT INTO list(url,id,secret,owner) VALUES (?,?,?,?)", [criteria.url, criteria.id, criteria.secret, req.cookies.id], function(err, result) {
         if (!err)
-            res.send(([criteria.url,'/'+criteria.id,'/secret/'+criteria.secret]).map(function(x){
-            	return "<a href='"+x+"'>"+x+"</a>"
-            }).join('<br />'));
+            res.send(serialize_criteria(criteria));
+        else{
+            console.log(err)
+            res.send('err');
+        }
+    });
+});
+app.get('/store', function(req, res) {
+    var owner = req.cookies.id;
+    connection.query("SELECT l.* FROM list l WHERE owner = ?", [owner], function(err, result) {
+        if (!err)
+            res.send(result.map(serialize_criteria).join('<hr />'));
         else{
             console.log(err)
             res.send('err');
