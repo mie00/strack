@@ -89,8 +89,12 @@ app.post('/store', function(req, res) {
 app.get('/store', function(req, res) {
     var owner = req.cookies.id;
     connection.query("SELECT l.* FROM list l WHERE owner = ?", [owner], function(err, result) {
-        if (!err)
-            res.send(result.map(serialize_criteria).join('<hr />'));
+        if (!err){
+            if(!result || !result.length)
+                res.send('you have to enter a url first')
+            else
+                res.send(result.map(serialize_criteria).join('<hr />'));
+        }
         else{
             console.log(err)
             res.send('err');
