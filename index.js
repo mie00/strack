@@ -62,7 +62,7 @@ app.get('/secret/:secret', function(req, res) {
     })
 })
 app.get('/', function(req, res) {
-    res.send('<form method="post" action="/store"><input type="text" name="url" /><input type="submit" value="submit" /></form>')
+    res.send('<form method="post" action="/store">Please Enter a URL: <input type="text" name="url" placeholder="www.google.com"/><input type="submit" value="submit" /></form><br /><a href="/store">click here to view your links</a>')
 });
 
 var serialize_criteria = function(criteria){return ([criteria.url,'/'+criteria.id,'/secret/'+criteria.secret]).map(function(x){
