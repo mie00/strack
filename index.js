@@ -97,6 +97,9 @@ app.get('/store', function(req, res) {
         }
     });
 });
+app.get('/favicon.ico', function(req, res){
+    res.send('');
+});
 app.get('/:id', function(req, res) {
     connection.query("SELECT url FROM list WHERE id = ?", [req.params.id], function(err, result) {
         if (!err)
