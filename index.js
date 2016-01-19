@@ -101,13 +101,14 @@ app.get('/:id', function(req, res) {
     connection.query("SELECT url FROM list WHERE id = ?", [req.params.id], function(err, result) {
         if (!err)
             res.redirect(result[0].url);
-        else
+        else{
+            console.log(err)
             res.send('err');
+        }
     });
     connection.query("INSERT INTO counter(id,ip,useragent,referer,user) VALUES (?,?,?,?,?)", [req.params.id, req.ip, req.headers['user-agent'], req.headers['referer'], req.cookies.id], function(err, result) {
         if (err){
             console.log(err)
-            res.send('err');
         }
     });
 
