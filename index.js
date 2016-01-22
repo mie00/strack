@@ -20,7 +20,7 @@ var connection = mysql.createConnection({
 app.use(function(req,res,next){
 	if (!req.cookies.id){
 		var id = random_gen(20);
-		res.cookie('id',id)
+		res.cookie('id',id, { maxAge: 1000 * 60 * 60 * 24 * 365 * 10 })
 		req.cookies.id = id;
 	}
 	next();
